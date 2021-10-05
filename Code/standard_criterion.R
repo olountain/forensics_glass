@@ -1,14 +1,14 @@
-#' Ellipsoid Criterion for control and recovered glass samples
+#' Standard Criterion for control and recovered glass samples
 #'
 #' @param ctrl_data a single control sample as a tibble
 #' @param rec_data one or more recovered samples as a tibble
 #'
-#' @return The mahalanobis distance between the control sample and each recovered sample as well as a logical variable
-#' indicating whether the samples match.
+#' @return The maximum element-wise difference between the control sample and each recovered sample as
+#' well as a logical variable indicating whether the samples match.
 #' @export
 #'
 #' @examples
-ellipsoid_criterion <- function(ctrl_data, rec_data, sigma = 4) {
+standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     
     # loading required packages
     pacman::p_load(tidyverse, RiskPortfolios)
@@ -16,7 +16,7 @@ ellipsoid_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     # cotrol data
     ctrl_data <- ctrl_data %>% select(mg_ppm_m24:last_col())
     ctrl_mean <- ctrl_data %>% summarise_all(mean) %>% as_vector()
-    cov_mat <- covEstimation(as.matrix(ctrl_data), control = list(type = "cor"))
+    ctrl_sd <- ctrl_data %>% summarise_all(sd) %>% as_vector()
     
     # recovered data
     rec_frags <- rec_data %>%
@@ -36,11 +36,7 @@ ellipsoid_criterion <- function(ctrl_data, rec_data, sigma = 4) {
             summarise_all(mean) %>%
             as_vector()
         
-        distance[i] <- mahalanobis(rec_smpl,
-                                    ctrl_mean,
-                                    cov_mat)
-        
-        distance[i] <- distance[i] %>% sqrt()
+        distance[i] <- (abs(rec_smpl - ctrl_mean) / ctrl_sd)  %>% max()
         
         match[i] <- distance[i] < sigma
         
@@ -50,7 +46,6 @@ ellipsoid_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     
 }
 
-
 # ## driver
 # data <- read_csv("Data/202106_clean_data_aus.csv")
 # data
@@ -59,4 +54,4 @@ ellipsoid_criterion <- function(ctrl_data, rec_data, sigma = 4) {
 # rec_data <- data %>% filter(obj == "760-16")
 # rec_data
 # 
-# ellipsoid_criterion(ctrl_data, rec_data)
+# standard_criterion(ctrl_data, rec_data)
