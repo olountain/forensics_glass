@@ -1,7 +1,7 @@
 #' Standard Criterion for control and recovered glass samples
 #'
-#' @param ctrl_data a single control sample as a tibble
-#' @param rec_data one or more recovered samples as a tibble
+#' @param ctrl_data A single control sample as a tibble
+#' @param rec_data One or more recovered samples as a tibble
 #'
 #' @return The maximum element-wise difference between the control sample and each recovered sample as
 #' well as a logical variable indicating whether the samples match.
@@ -11,7 +11,7 @@
 standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     
     # loading required packages
-    pacman::p_load(tidyverse, RiskPortfolios)
+    pacman::p_load(tidyverse)
     
     # cotrol data
     ctrl_data <- ctrl_data %>% select(mg_ppm_m24:last_col())

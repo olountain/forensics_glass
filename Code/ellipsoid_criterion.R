@@ -1,7 +1,7 @@
 #' Ellipsoid Criterion for control and recovered glass samples
 #'
-#' @param ctrl_data a single control sample as a tibble
-#' @param rec_data one or more recovered samples as a tibble
+#' @param ctrl_data A single control sample as a tibble
+#' @param rec_data One or more recovered samples as a tibble
 #'
 #' @return The mahalanobis distance between the control sample and each recovered sample as well as a logical variable
 #' indicating whether the samples match.

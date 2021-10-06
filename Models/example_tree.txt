@@ -1,0 +1,7 @@
+|--- petal_width (cm) <= 0.80
+|   |--- class: setosa
+|--- petal_width (cm) >  0.80
+|   |--- petal_width (cm) <= 1.75
+|   |   |--- class: versicolor
+|   |--- petal_width (cm) >  1.75
+|   |   |--- class: virginica
