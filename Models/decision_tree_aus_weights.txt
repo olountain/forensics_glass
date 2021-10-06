@@ -5,73 +5,73 @@
 |   |   |   |   |--- mg_ppm_m24 <= 1369.00
 |   |   |   |   |   |--- fe_ppm_m57 <= 718.50
 |   |   |   |   |   |   |--- sn_ppm_m118 <= 0.59
-|   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |--- weights: [122509.00, 1243.00] class: KM
 |   |   |   |   |   |   |--- sn_ppm_m118 >  0.59
 |   |   |   |   |   |   |   |--- al_ppm_m27 <= 27.05
 |   |   |   |   |   |   |   |   |--- fe_ppm_m57 <= 74.20
-|   |   |   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |   |   |--- weights: [11848.00, 183.00] class: KM
 |   |   |   |   |   |   |   |   |--- fe_ppm_m57 >  74.20
-|   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |--- weights: [0.00, 16.00] class: KNM
 |   |   |   |   |   |   |   |--- al_ppm_m27 >  27.05
 |   |   |   |   |   |   |   |   |--- ce_ppm_m140 <= 0.06
 |   |   |   |   |   |   |   |   |   |--- sr_ppm_m88 <= 0.57
 |   |   |   |   |   |   |   |   |   |   |--- ba_ppm_m137 <= 1.50
-|   |   |   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |   |   |--- weights: [0.00, 307.00] class: KNM
 |   |   |   |   |   |   |   |   |   |   |--- ba_ppm_m137 >  1.50
-|   |   |   |   |   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |   |   |   |   |--- weights: [98.00, 0.00] class: KM
 |   |   |   |   |   |   |   |   |   |--- sr_ppm_m88 >  0.57
 |   |   |   |   |   |   |   |   |   |   |--- ce_ppm_m140 <= 0.03
-|   |   |   |   |   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |   |   |   |   |--- weights: [352.00, 39.00] class: KM
 |   |   |   |   |   |   |   |   |   |   |--- ce_ppm_m140 >  0.03
-|   |   |   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |   |   |--- weights: [0.00, 20.00] class: KNM
 |   |   |   |   |   |   |   |   |--- ce_ppm_m140 >  0.06
 |   |   |   |   |   |   |   |   |   |--- zr_ppm_m90 <= 7.13
 |   |   |   |   |   |   |   |   |   |   |--- rb_ppm_m85 <= 0.03
-|   |   |   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |   |   |--- weights: [0.00, 30.00] class: KNM
 |   |   |   |   |   |   |   |   |   |   |--- rb_ppm_m85 >  0.03
 |   |   |   |   |   |   |   |   |   |   |   |--- la_ppm_m139 <= 0.01
-|   |   |   |   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |   |   |   |--- weights: [0.00, 15.00] class: KNM
 |   |   |   |   |   |   |   |   |   |   |   |--- la_ppm_m139 >  0.01
-|   |   |   |   |   |   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |   |   |   |   |   |--- weights: [1858.00, 80.00] class: KM
 |   |   |   |   |   |   |   |   |   |--- zr_ppm_m90 >  7.13
-|   |   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |   |--- weights: [0.00, 31.00] class: KNM
 |   |   |   |   |   |--- fe_ppm_m57 >  718.50
-|   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |--- weights: [0.00, 49.00] class: KNM
 |   |   |   |   |--- mg_ppm_m24 >  1369.00
-|   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |--- weights: [0.00, 51.00] class: KNM
 |   |   |   |--- ce_ppm_m140 >  4.10
-|   |   |   |   |--- class: KNM
+|   |   |   |   |--- weights: [0.00, 216.00] class: KNM
 |   |   |--- sn_ppm_m118 >  1.89
 |   |   |   |--- k_ppm_m39 <= 9.62
 |   |   |   |   |--- ti_ppm_m49 <= 5.10
-|   |   |   |   |   |--- class: KM
+|   |   |   |   |   |--- weights: [3598.00, 27.00] class: KM
 |   |   |   |   |--- ti_ppm_m49 >  5.10
-|   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |--- weights: [0.00, 247.00] class: KNM
 |   |   |   |--- k_ppm_m39 >  9.62
 |   |   |   |   |--- ti_ppm_m49 <= 1.05
 |   |   |   |   |   |--- ca_ppm_m42 <= 255.00
 |   |   |   |   |   |   |--- pb_ppm_m208 <= 0.10
-|   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |--- weights: [0.00, 20.00] class: KNM
 |   |   |   |   |   |   |--- pb_ppm_m208 >  0.10
-|   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |--- weights: [197.00, 5.00] class: KM
 |   |   |   |   |   |--- ca_ppm_m42 >  255.00
-|   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |--- weights: [0.00, 76.00] class: KNM
 |   |   |   |   |--- ti_ppm_m49 >  1.05
 |   |   |   |   |   |--- sn_ppm_m118 <= 59.09
-|   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |--- weights: [0.00, 2344.00] class: KNM
 |   |   |   |   |   |--- sn_ppm_m118 >  59.09
 |   |   |   |   |   |   |--- sn_ppm_m118 <= 60.01
-|   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |--- weights: [34.00, 0.00] class: KM
 |   |   |   |   |   |   |--- sn_ppm_m118 >  60.01
-|   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |--- weights: [0.00, 64.00] class: KNM
 |   |--- mn_ppm_m55 >  2.72
 |   |   |--- fe_ppm_m57 <= 11.40
 |   |   |   |--- ti_ppm_m49 <= 3.50
-|   |   |   |   |--- class: KM
+|   |   |   |   |--- weights: [217.00, 3.00] class: KM
 |   |   |   |--- ti_ppm_m49 >  3.50
-|   |   |   |   |--- class: KNM
+|   |   |   |   |--- weights: [0.00, 112.00] class: KNM
 |   |   |--- fe_ppm_m57 >  11.40
-|   |   |   |--- class: KNM
+|   |   |   |--- weights: [0.00, 3401.00] class: KNM
 |--- al_ppm_m27 >  109.05
 |   |--- al_ppm_m27 <= 263.05
 |   |   |--- sn_ppm_m118 <= 1.06
@@ -82,46 +82,46 @@
 |   |   |   |   |   |   |   |--- pb_ppm_m208 <= 0.12
 |   |   |   |   |   |   |   |   |--- ba_ppm_m137 <= 1.16
 |   |   |   |   |   |   |   |   |   |--- sn_ppm_m118 <= 0.19
-|   |   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |   |--- weights: [0.00, 16.00] class: KNM
 |   |   |   |   |   |   |   |   |   |--- sn_ppm_m118 >  0.19
-|   |   |   |   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |   |   |   |--- weights: [852.00, 10.00] class: KM
 |   |   |   |   |   |   |   |   |--- ba_ppm_m137 >  1.16
-|   |   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |   |--- weights: [0.00, 139.00] class: KNM
 |   |   |   |   |   |   |   |--- pb_ppm_m208 >  0.12
-|   |   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |   |--- weights: [3535.00, 40.00] class: KM
 |   |   |   |   |   |   |--- mg_ppm_m24 >  585.00
 |   |   |   |   |   |   |   |--- ba_ppm_m137 <= 0.88
-|   |   |   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |   |   |--- weights: [166.00, 0.00] class: KM
 |   |   |   |   |   |   |   |--- ba_ppm_m137 >  0.88
-|   |   |   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |   |   |--- weights: [0.00, 88.00] class: KNM
 |   |   |   |   |   |--- fe_ppm_m57 >  321.50
-|   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |--- weights: [0.00, 139.00] class: KNM
 |   |   |   |   |--- ti_ppm_m49 >  33.20
-|   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |--- weights: [0.00, 539.00] class: KNM
 |   |   |   |--- mg_ppm_m24 >  835.00
-|   |   |   |   |--- class: KNM
+|   |   |   |   |--- weights: [0.00, 1151.00] class: KNM
 |   |   |--- sn_ppm_m118 >  1.06
 |   |   |   |--- ti_ppm_m49 <= 1.35
 |   |   |   |   |--- fe_ppm_m57 <= 27.10
-|   |   |   |   |   |--- class: KM
+|   |   |   |   |   |--- weights: [260.00, 3.00] class: KM
 |   |   |   |   |--- fe_ppm_m57 >  27.10
-|   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |--- weights: [0.00, 102.00] class: KNM
 |   |   |   |--- ti_ppm_m49 >  1.35
 |   |   |   |   |--- rb_ppm_m85 <= 0.03
 |   |   |   |   |   |--- k_ppm_m39 <= 49.05
-|   |   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |   |--- weights: [0.00, 284.00] class: KNM
 |   |   |   |   |   |--- k_ppm_m39 >  49.05
-|   |   |   |   |   |   |--- class: KM
+|   |   |   |   |   |   |--- weights: [105.00, 0.00] class: KM
 |   |   |   |   |--- rb_ppm_m85 >  0.03
-|   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |--- weights: [0.00, 4988.00] class: KNM
 |   |--- al_ppm_m27 >  263.05
 |   |   |--- k_ppm_m39 <= 5324.22
-|   |   |   |--- class: KNM
+|   |   |   |--- weights: [142.00, 126173.00] class: KNM
 |   |   |--- k_ppm_m39 >  5324.22
 |   |   |   |--- mg_ppm_m24 <= 1245.00
 |   |   |   |   |--- mn_ppm_m55 <= 39.11
-|   |   |   |   |   |--- class: KM
+|   |   |   |   |   |--- weights: [1140.00, 0.00] class: KM
 |   |   |   |   |--- mn_ppm_m55 >  39.11
-|   |   |   |   |   |--- class: KNM
+|   |   |   |   |   |--- weights: [0.00, 155.00] class: KNM
 |   |   |   |--- mg_ppm_m24 >  1245.00
-|   |   |   |   |--- class: KNM
+|   |   |   |   |--- weights: [0.00, 4269.00] class: KNM
