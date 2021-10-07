@@ -1,0 +1,46 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{ASTM-E2330-12}{2012}]{ASTM12}
+ASTM-E2330-12.
+\newblock Test method for determination of concentrations of elements in glass
+  samples using inductively coupled plasma mass spectrometry ({ICP}-{MS}) for
+  forensic comparisons, 2012.
+
+\bibitem[\protect\citeauthoryear{ASTM-E2927-16}{2016}]{ASTM16}
+ASTM-E2927-16.
+\newblock Test method for determination of trace elements in soda-lime glass
+  samples using laser ablation inductively coupled plasma mass spectrometry for
+  forensic comparisons, 2016.
+
+\bibitem[\protect\citeauthoryear{Curran \bgroup \em et al.\egroup
+  }{2000}]{Curran2000}
+James~Michael Curran, Tacha Natalie~Hicks Champod, and John~S Buckleton.
+\newblock {\em Forensic interpretation of glass evidence}.
+\newblock CRC Press, 2000.
+
+\bibitem[\protect\citeauthoryear{Nelson and Revell}{1967}]{Nelson1967}
+D.F. Nelson and B.C. Revell.
+\newblock Backward fragmentation from breaking glass.
+\newblock {\em Journal of the Forensic Science Society}, 7(2):58--61, apr 1967.
+
+\bibitem[\protect\citeauthoryear{Park and Carriquiry}{2019}]{Park2019}
+Soyoung Park and Alicia Carriquiry.
+\newblock Learning algorithms to evaluate forensic glass evidence.
+\newblock {\em The Annals of Applied Statistics}, 13(2):1068--1102, 2019.
+
+\bibitem[\protect\citeauthoryear{Park \bgroup \em et al.\egroup
+  }{2020}]{Park2020}
+Soyoung Park, Alicia Carriquiry, L.~Kenneth Horkley, and David~W. Peate.
+\newblock A database of elemental compositions of architectural float glass
+  samples measured by {LA}-{ICP}-{MS}.
+\newblock {\em Data in Brief}, 30:105449, jun 2020.
+
+\bibitem[\protect\citeauthoryear{Weis \bgroup \em et al.\egroup
+  }{2011}]{Weis2011}
+Peter Weis, Marc D{\"u}cking, Peter Watzke, Sonja Menges, and Stefan Becker.
+\newblock Establishing a match criterion in forensic comparison analysis of
+  float glass using laser ablation inductively coupled plasma mass
+  spectrometry.
+\newblock {\em Journal of Analytical Atomic Spectrometry}, 26(6):1273, 2011.
+
+\end{thebibliography}

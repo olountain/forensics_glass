@@ -1,0 +1,13 @@
+\contentsline {section}{\nameref {sec:abstract}}{1}{section*.1}% 
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}% 
+\contentsline {subsection}{\numberline {1.1}Forensic Glass Evidence}{1}{subsection.1.1}% 
+\contentsline {subsection}{\numberline {1.2}LA-ICPMS Data}{2}{subsection.1.2}% 
+\contentsline {subsection}{\numberline {1.3}Data sets}{2}{subsection.1.3}% 
+\contentsline {section}{\numberline {2}Match Criteria}{3}{section.2}% 
+\contentsline {subsection}{\numberline {2.1}Standard 4$\sigma $ Interval Criterion}{4}{subsection.2.1}% 
+\contentsline {subsection}{\numberline {2.2}Ellipsoid 4$\sigma $ Criterion}{4}{subsection.2.2}% 
+\contentsline {section}{\numberline {3}Results}{5}{section.3}% 
+\contentsline {subsection}{\numberline {3.1}USA Ribbon Data}{5}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {3.2}Australian Casework Data}{6}{subsection.3.2}% 
+\contentsline {section}{\numberline {4}Discussion}{6}{section.4}% 
+\contentsline {section}{References}{7}{section.4}% 
