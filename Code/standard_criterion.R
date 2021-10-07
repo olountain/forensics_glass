@@ -25,6 +25,7 @@ standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     
     # containers
     distance <- numeric(length(rec_frags))
+    distances <- vector(mode = "list", length = length(rec_frags))
     match <- logical(length(rec_frags))
     
     # comparisons
@@ -36,13 +37,15 @@ standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
             summarise_all(mean) %>%
             as_vector()
         
-        distance[i] <- (abs(rec_smpl - ctrl_mean) / ctrl_sd)  %>% max()
+        distances[[i]] <- (abs(rec_smpl - ctrl_mean) / ctrl_sd) %>% as.list() %>% as_tibble() 
+        distance[i] <- distances[[i]]  %>% max()
+        
         
         match[i] <- distance[i] < sigma
         
     }
     
-    tibble(frag = rec_frags, match, distance) %>% return()
+    tibble(frag = rec_frags, match, distance, distances)  %>% return()
     
 }
 
