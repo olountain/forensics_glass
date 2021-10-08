@@ -72,7 +72,7 @@ parse_decision_tree <- function(path) {
             
             # parse predicted class
             return_class <- return_val[5]
-            return_class <- ifelse(return_class == "KM", "Match", "Non-Match")
+            return_class <- ifelse(return_class == "KM", "Match", "Non Match")
             return_class <- paste("'", return_class, "'", sep = "")
             
             # calculate predicted probabilities

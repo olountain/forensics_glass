@@ -26,7 +26,7 @@ standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     # containers
     distance <- numeric(length(rec_frags))
     distances <- vector(mode = "list", length = length(rec_frags))
-    match <- logical(length(rec_frags))
+    match <- character(length(rec_frags))
     
     # comparisons
     for (i in 1:length(rec_frags)) {
@@ -41,11 +41,11 @@ standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
         distance[i] <- distances[[i]]  %>% max()
         
         
-        match[i] <- distance[i] < sigma
+        match[i] <- ifelse(distance[i] < sigma, "Match", "Non Match")
         
     }
     
-    tibble(frag = rec_frags, match, distance, distances)  %>% return()
+    tibble(Fragment = as.integer(rec_frags), Match = match, Score = distance, distances)  %>% return()
     
 }
 

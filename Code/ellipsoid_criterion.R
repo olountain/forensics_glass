@@ -25,7 +25,7 @@ ellipsoid_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     
     # containers
     distance <- numeric(length(rec_frags))
-    match <- logical(length(rec_frags))
+    match <- character(length(rec_frags))
     
     # comparisons
     for (i in 1:length(rec_frags)) {
@@ -42,11 +42,11 @@ ellipsoid_criterion <- function(ctrl_data, rec_data, sigma = 4) {
         
         distance[i] <- distance[i] %>% sqrt()
         
-        match[i] <- distance[i] < sigma
+        match[i] <- ifelse(distance[i] < sigma, "Match", "Non Match")
         
     }
     
-    tibble(frag = rec_frags, match, distance) %>% return()
+    tibble(Fragment = as.integer(rec_frags), Match = match, Score = distance) %>% return()
     
 }
 
