@@ -1,15 +1,15 @@
 # Fdb version 3
-["bibtex ellipsoid_criterion"] 1633568707 "ellipsoid_criterion.aux" "ellipsoid_criterion.bbl" "ellipsoid_criterion" 1633568709
-  "../../../MPhil/Research/Bibliography/full_bibliography.bib" 1630988504 34130 0341fd599089cc0718d688c7e9277442 ""
+["bibtex ellipsoid_criterion"] 1633910150 "ellipsoid_criterion.aux" "ellipsoid_criterion.bbl" "ellipsoid_criterion" 1633910194
+  "../../../MPhil/Research/Bibliography/full_bibliography.bib" 1633910122 36463 2c9c53baafce5ebbda5f6fe47d61684f ""
   "/usr/local/texlive/2019/texmf-dist/bibtex/bst/beebe/named.bst" 1136766823 22941 5de9ab1d83bc8b693f08ecd1b7942647 ""
-  "ellipsoid_criterion.aux" 1633568709 8245 46c13666960ae8dd0a7292f48d1e7c8b "pdflatex"
+  "ellipsoid_criterion.aux" 1633910152 8795 16f39be65ed285fc2379c51977a10e95 "pdflatex"
   (generated)
-  "ellipsoid_criterion.blg"
   "ellipsoid_criterion.bbl"
-["pdflatex"] 1633568707 "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.tex" "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.pdf" "ellipsoid_criterion" 1633568709
-  "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.aux" 1633568709 8245 46c13666960ae8dd0a7292f48d1e7c8b ""
-  "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.tex" 1633568702 23755 fc32bbaf0b4b949b633b78c99ad33ab3 ""
-  "/dev/null" 1633568703 0 d41d8cd98f00b204e9800998ecf8427e ""
+  "ellipsoid_criterion.blg"
+["pdflatex"] 1633910150 "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.tex" "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.pdf" "ellipsoid_criterion" 1633910194
+  "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.aux" 1633910152 8795 16f39be65ed285fc2379c51977a10e95 ""
+  "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.tex" 1633910193 23873 3d9925178c6f1bac8ab4c3700443aadd ""
+  "/dev/null" 1633910194 0 d41d8cd98f00b204e9800998ecf8427e ""
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -132,17 +132,17 @@
   "/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1557342064 3277517 23507ed665b4dd9046f0f2a94bbef2be ""
   "/usr/local/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1575352312 4259636 db9b2fec4e88b75538e1e6bb40f82727 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
-  "ellipsoid_criterion.aux" 1633568709 8245 46c13666960ae8dd0a7292f48d1e7c8b "pdflatex"
-  "ellipsoid_criterion.bbl" 1633568707 2039 6ced479ed1ebc23f6d63774d0b7f5904 "bibtex ellipsoid_criterion"
-  "ellipsoid_criterion.out" 1633568709 753 589e20aeb0001f3b6ba2b01bf7f84c81 "pdflatex"
-  "ellipsoid_criterion.tex" 1633568702 23755 fc32bbaf0b4b949b633b78c99ad33ab3 ""
-  "ellipsoid_criterion.toc" 1633568709 1010 ac63d9c3975756cba910cde53360fb42 "pdflatex"
+  "ellipsoid_criterion.aux" 1633910152 8795 16f39be65ed285fc2379c51977a10e95 "pdflatex"
+  "ellipsoid_criterion.bbl" 1633910150 4448 c68971a62933e74772c6f32ecc6b5281 "bibtex ellipsoid_criterion"
+  "ellipsoid_criterion.out" 1633910152 753 589e20aeb0001f3b6ba2b01bf7f84c81 "pdflatex"
+  "ellipsoid_criterion.tex" 1633910193 23873 3d9925178c6f1bac8ab4c3700443aadd ""
+  "ellipsoid_criterion.toc" 1633910152 1010 ac63d9c3975756cba910cde53360fb42 "pdflatex"
   "figures/ellipse.eps" 1623737215 30859 86011d2c1a66a546c8c46f2217419e21 ""
   (generated)
-  "ellipsoid_criterion.pdf"
   "ellipsoid_criterion.log"
   "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.pdf"
-  "ellipsoid_criterion.toc"
   "/Users/oliverlountain/Box/Forensics/Papers/Ellipsoid Criterion/ellipsoid_criterion.log"
+  "ellipsoid_criterion.pdf"
   "ellipsoid_criterion.out"
   "ellipsoid_criterion.aux"
+  "ellipsoid_criterion.toc"

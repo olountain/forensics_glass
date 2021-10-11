@@ -1,5 +1,13 @@
 \begin{thebibliography}{}
 
+\bibitem[\protect\citeauthoryear{Aeschliman \bgroup \em et al.\egroup
+  }{2003}]{Aeschliman2003}
+David~B. Aeschliman, Stanley~J. Bajic, David~P. Baldwin, and R.~S. Houk.
+\newblock Spatially-resolved analysis of solids by laser ablation-inductively
+  coupled plasma-mass spectrometry: trace elemental quantification without
+  matrix-matched solid standards.
+\newblock {\em Journal of Analytical Atomic Spectrometry}, 18(8):872, 2003.
+
 \bibitem[\protect\citeauthoryear{ASTM-E2330-12}{2012}]{ASTM12}
 ASTM-E2330-12.
 \newblock Test method for determination of concentrations of elements in glass
@@ -13,10 +21,38 @@ ASTM-E2927-16.
   forensic comparisons, 2016.
 
 \bibitem[\protect\citeauthoryear{Curran \bgroup \em et al.\egroup
+  }{1997}]{Curran1997}
+J.M. Curran, C.M. Triggs, J.R. Almirall, J.S. Buckleton, and K.A.J. Walsh.
+\newblock The interpretation of elemental composition measurements from
+  forensic glass evidence: {II}.
+\newblock {\em Science {\&} Justice}, 37(4):245--249, oct 1997.
+
+\bibitem[\protect\citeauthoryear{Curran \bgroup \em et al.\egroup
   }{2000}]{Curran2000}
 James~Michael Curran, Tacha Natalie~Hicks Champod, and John~S Buckleton.
 \newblock {\em Forensic interpretation of glass evidence}.
 \newblock CRC Press, 2000.
+
+\bibitem[\protect\citeauthoryear{Dorn \bgroup \em et al.\egroup
+  }{2015}]{Dorn2015}
+Hendrik Dorn, David~E. Ruddell, Alex Heydon, and Brenda~D. Burton.
+\newblock Discrimination of float glass by {LA}-{ICP}-{MS}: assessment of
+  exclusion criteria using casework samples.
+\newblock {\em Canadian Society of Forensic Science Journal}, 48(2):85--96, mar
+  2015.
+
+\bibitem[\protect\citeauthoryear{Houk}{1990}]{Houk1990}
+R.S. Houk.
+\newblock Chapter 91 elemental analysis by atomic emission and mass
+  spectrometry with inductively coupled plasmas.
+\newblock In {\em Handbook on the Physics and Chemistry of Rare Earths}, pages
+  385--421. Elsevier, 1990.
+
+\bibitem[\protect\citeauthoryear{Koons and Buscaglia}{2002}]{Koons2002}
+Robert Koons and JoAnn Buscaglia.
+\newblock Interpretation of glass composition measurements: The effects of
+  match criteria on discrimination capability.
+\newblock {\em Journal of forensic sciences}, 47:505--12, 06 2002.
 
 \bibitem[\protect\citeauthoryear{Nelson and Revell}{1967}]{Nelson1967}
 D.F. Nelson and B.C. Revell.
@@ -34,6 +70,19 @@ Soyoung Park, Alicia Carriquiry, L.~Kenneth Horkley, and David~W. Peate.
 \newblock A database of elemental compositions of architectural float glass
   samples measured by {LA}-{ICP}-{MS}.
 \newblock {\em Data in Brief}, 30:105449, jun 2020.
+
+\bibitem[\protect\citeauthoryear{Trejos \bgroup \em et al.\egroup
+  }{2013}]{Trejos2013}
+Tatiana Trejos, Robert Koons, Stefan Becker, Ted Berman, JoAnn Buscaglia, Marc
+  Duecking, Tiffany Eckert-Lumsdon, Troy Ernst, Christopher Hanlon, Alex
+  Heydon, Kim Mooney, Randall Nelson, Kristine Olsson, Christopher Palenik,
+  Edward~Chip Pollock, David Rudell, Scott Ryland, Anamary Tarifa, Melissa
+  Valadez, Peter Weis, and Jose Almirall.
+\newblock Cross-validation and evaluation of the performance of methods for the
+  elemental analysis of forensic glass by $\mu$-{XRF}, {ICP}-{MS}, and
+  {LA}-{ICP}-{MS}.
+\newblock {\em Analytical and Bioanalytical Chemistry}, 405(16):5393--5409, may
+  2013.
 
 \bibitem[\protect\citeauthoryear{Weis \bgroup \em et al.\egroup
   }{2011}]{Weis2011}
