@@ -129,7 +129,7 @@ parse_decision_tree <- function(path) {
 
 
 # ## Driver
-# test_data <- data[1:2,] %>% select(mg_ppm_m24:last_col())
+# test_data <- data[1:2,] %>% select(li_7:last_col())
 # test_data <- abs(test_data[1,] - test_data[2,])
 # test_data
 # 

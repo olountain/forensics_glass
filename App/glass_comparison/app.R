@@ -4,19 +4,23 @@ pacman::p_load(shiny,
                tidyverse,
                kableExtra,
                janitor,
-               DT)
+               DT,
+               vroom)
 
 # sample data
-data <- read_csv("../../Data/202106_clean_data_aus.csv") %>%
-    select(-X1) %>% 
-    mutate(frag = as.integer(frag), rep = as.integer(rep))
-    
-# data <- read_csv("Data/202106_clean_data_aus.csv") %>% select(-X1)
-ctrl_data <- data %>% filter(obj == "760-27")
-rec_data <- data %>% filter(obj == "760-16")
+# data <- read_csv("../../Data/202106_clean_data_aus.csv") %>%
+#     select(-X1) %>% 
+#     mutate(frag = as.integer(frag), rep = as.integer(rep))
+#     
+# # data <- read_csv("Data/202106_clean_data_aus.csv") %>% select(-X1)
+# ctrl_data <- data %>% filter(obj == "760-27")
+# rec_data <- data %>% filter(obj == "760-16")
 
 # bind_rows(ctrl_data, rec_data) %>% write_csv(file = "Data/clean_test_data.csv")
 
+source("../../Code/interpret_source_file.R")
+source("../../Code/cleaning_step_1.R")
+source("../../Code/cleaning_step_2.R")
 
 # setup interval criteria
 source("../../Code/standard_criterion.R")
@@ -24,57 +28,57 @@ source("../../Code/ellipsoid_criterion.R")
 # source("Code/standard_criterion.R")
 # source("Code/ellipsoid_criterion.R")
 
-std_res <- standard_criterion(ctrl_data, rec_data)
-ellips_res <- ellipsoid_criterion(ctrl_data, rec_data)
-
-all_res
-
-all_res <- bind_cols(std_res[,1:3], ellips_res[,2:3]) %>% 
-    rename(`Standard Match` = Match...2,
-           `Standard Score` = Score...3,
-           `Ellipsoid Match` = Match...4,
-           `Ellipsoid Score` = Score...5) %>% 
-    mutate(Agree = ifelse(`Standard Match` == `Ellipsoid Match`,
-                          "Yes", "No"))
+# std_res <- standard_criterion(ctrl_data, rec_data)
+# ellips_res <- ellipsoid_criterion(ctrl_data, rec_data)
+# 
+# all_res
+# 
+# all_res <- bind_cols(std_res[,1:3], ellips_res[,2:3]) %>% 
+#     rename(`Standard Match` = Match...2,
+#            `Standard Score` = Score...3,
+#            `Ellipsoid Match` = Match...4,
+#            `Ellipsoid Score` = Score...5) %>% 
+#     mutate(Agree = ifelse(`Standard Match` == `Ellipsoid Match`,
+#                           "Yes", "No"))
 
 # setup decision tree
 source("../../Code/parse_tree_text.R")
 path <- "../../Models/decision_tree_aus_weights.txt"
 # source("Code/parse_tree_text.R")
 # path <- "Models/decision_tree_aus_weights.txt"
-test_tree <- parse_decision_tree(path)
-ctrl_mean <- ctrl_data %>%
-    select(mg_ppm_m24:last_col()) %>%
-    summarise_all(mean)
-
-rec_means <- rec_data %>%
-    group_by(frag) %>%
-    select(mg_ppm_m24:last_col()) %>%
-    summarise_all(mean)
-
-rec_diffs <- rec_means
-
-for (i in 1:nrow(rec_means)) {
-    rec_diffs[i, 2:18] <- abs(ctrl_mean - rec_means[i, 2:18])
-}
-
-tree_res <- vector(mode = "list", length = nrow(rec_diffs))
-
-for (i in 1:nrow(rec_diffs)) {
-    tree_res[[i]] <- test_tree(rec_diffs[i,])
-    tree_res[[i]]$probs <- max(tree_res[[i]]$probs)
-}
-
-tree_res <- tree_res %>%
-    map_dfr(as_tibble) %>%
-    rename(Match = class, Probability = probs)
+# test_tree <- parse_decision_tree(path)
+# ctrl_mean <- ctrl_data %>%
+#     select(mg_ppm_m24:last_col()) %>%
+#     summarise_all(mean)
+# 
+# rec_means <- rec_data %>%
+#     group_by(frag) %>%
+#     select(mg_ppm_m24:last_col()) %>%
+#     summarise_all(mean)
+# 
+# rec_diffs <- rec_means
+# 
+# for (i in 1:nrow(rec_means)) {
+#     rec_diffs[i, 2:18] <- abs(ctrl_mean - rec_means[i, 2:18])
+# }
+# 
+# tree_res <- vector(mode = "list", length = nrow(rec_diffs))
+# 
+# for (i in 1:nrow(rec_diffs)) {
+#     tree_res[[i]] <- test_tree(rec_diffs[i,])
+#     tree_res[[i]]$probs <- max(tree_res[[i]]$probs)
+# }
+# 
+# tree_res <- tree_res %>%
+#     map_dfr(as_tibble) %>%
+#     rename(Match = class, Probability = probs)
 
 
 
 # Wrap shinymaterial apps in material_page
 ui <- material_page(
     title = "Glass Comparison",
-    primary_theme_color = "lightblue",
+    primary_theme_color = "dodgerblue",
     nav_bar_fixed = TRUE,
     # Place side-nav in the beginning of the UI
     material_side_nav(
@@ -82,129 +86,181 @@ ui <- material_page(
         # Place side-nav tabs within side-nav
         material_side_nav_tabs(
             side_nav_tabs = c(
+                "Instructions" = "instructions",
                 "Data" = "data",
-                "Interval Criteria" = "interval_ritera",
-                "Decision Tree" = "decision_tree"
+                "Compare Samples" = "compare_samples",
+                "Search Database" = "search_database"
             ),
-            icons = c("cloud_upload", "insert_chart", "insert_chart")
+            icons = c("info", "cloud_upload", "insert_chart", "search")
         )
-    ),
-    # Define side-nav tab content
-    material_side_nav_tab_content(
-        side_nav_tab_id = "data",
-        
-        material_card(
-            tags$h3("Data")
-        ),
-        
-        material_file_input(
-            input_id = "file_upload",
-            label = "Upload Data"
-        ),
-        
-        material_card(
-            tags$h5("Uploaded Data"),
-            
-            # textOutput("upl_success"),
-            
-            div(style = 'overflow-x: scroll', dataTableOutput('upl_data_tbl')),
-            
-            div(style = 'overflow-x: scroll', dataTableOutput('upl_ctrl_tbl')),
-            
-            div(style = 'overflow-x: scroll', dataTableOutput('upl_rec_tbl'))
-        ),
-        
-        material_card(
-            tags$h5("Control Data"),
-            
-            div(style = 'overflow-x: scroll', dataTableOutput('ctrl_data_tbl'))
-        ),
-        
-        material_card(
-            tags$h5("Recovered Data"),
-            
-            div(style = 'overflow-x: scroll', dataTableOutput('rec_data_tbl'))
-        ),
-        
-        material_button(
-            input_id = "calculate",
-            label = "Calculate"
-        )
-        
     ),
     
     material_side_nav_tab_content(
-        side_nav_tab_id = "interval_ritera",
+        side_nav_tab_id = "instructions"
+    ),
+    
+    # Define side-nav tab content
+    material_side_nav_tab_content(
         
-        material_card(
-            tags$h3("Interval Criteria")
+## Data Side Tab -------------------------------------------------------------------------------------
+        side_nav_tab_id = "data",
+
+        material_tabs(
+            tabs = c(
+                "Upload Data" = "upload_tab",
+                "Clean Data" = "clean_tab"
+            )
         ),
-        
-        material_row(
-            material_column(
-                width = 6,
-                
-                material_card(
-                    tags$h5("Outcomes"),
-                    
-                    # textOutput("res_std"),
-                    # 
-                    # textOutput("dist_std"),
-                    
-                    div(style = 'overflow-x: scroll', tableOutput('table_all'))
-                ),
+
+        material_tab_content(
+            tab_id = "upload_tab",
+            
+            material_file_input(
+                input_id = "file_upload",
+                label = "Upload Data",
+                color = "dodgerblue"
             ),
             
-            material_column(
-                width = 6,
+            material_card(
+                tags$h5("Raw Data"),
                 
-                material_card(
-                    tags$h5("Element Differences"),
-                    
-                    div(style = 'overflow-x: scroll', tableOutput('table_differences'))
-                )
+                # textOutput("upl_success"),
+                dataTableOutput('upl_data_tbl')
+            ),
+            
+
+        ),
+        material_tab_content(
+            tab_id = "clean_tab",
+            
+            material_card(
+                tags$h5("Control Data"),
                 
+                # div(style = 'overflow-x: scroll', dataTableOutput('upl_ctrl_tbl'))
+                dataTableOutput('upl_ctrl_tbl')
+            ),
+            
+            material_card(
+                tags$h5("Recovered Data"),
+                
+                # div(style = 'overflow-x: scroll', dataTableOutput('upl_rec_tbl'))
+                dataTableOutput('upl_rec_tbl')
+            ),
+        ),
+        
+        
+
+## Old example cards ---------------------------------------------------------------------------------
+        # material_card(
+        #     tags$h5("Control Data"),
+        #     
+        #     div(style = 'overflow-x: scroll', dataTableOutput('ctrl_data_tbl'))
+        # ),
+        # 
+        # material_card(
+        #     tags$h5("Recovered Data"),
+        #     
+        #     div(style = 'overflow-x: scroll', dataTableOutput('rec_data_tbl'))
+        # ),
+
+## Calculate button ----------------------------------------------------------------------------------
+        # material_button(
+        #     input_id = "calculate",
+        #     label = "Calculate"
+        # )
+        
+    ),
+
+
+## Intrerval Side Tab --------------------------------------------------------------------------------
+    material_side_nav_tab_content(
+        side_nav_tab_id = "compare_samples",
+        
+        material_tabs(
+            tabs = c(
+                "Interval Criteria" = "interval_criteria",
+                "Decision tree" = "decision_tree"
             )
         ),
         
+        material_tab_content(
+            tab_id = "interval_criteria",
         
         
+            material_row(
+                material_column(
+                    width = 6,
+                    
+                    material_card(
+                        tags$h5("Outcomes"),
+                        
+                        # textOutput("res_std"),
+                        # 
+                        # textOutput("dist_std"),
+                        
+                        div(style = 'overflow-x: scroll', tableOutput('table_all'))
+                    ),
+                ),
+                
+                material_column(
+                    width = 6,
+                    
+                    material_card(
+                        tags$h5("Element Differences"),
+                        
+                        div(style = 'overflow-x: scroll', tableOutput('table_differences'))
+                    )
+                    
+                )
+            ),
+    
+        ),
+
+        material_tab_content(
+            tab_id = "decision_tree",
+         
+            material_row(
+                material_column(
+                    width = 5,
+                    
+                    material_card(
+                        
+                        tags$h5("Outcomes"),
+                        
+                        tableOutput("dec_tree_res"),
+                        
+                        # textOutput("dec_tree_prob"),
+                        
+                    )
+                ),
+                
+                material_column(
+                    width = 7,
+                    
+                    material_card(
+                        
+                        tags$h5("Decision Tree Rules"),
+                        
+                        div(style = 'overflow-x: scroll', uiOutput('dec_tree_logic'))
+                        
+                    )
+                    
+                )
+            )
+               
+        )
         
+    
     ),
+
+## Decision Tree Side Tab --------------------------------------------------------------------------------
     material_side_nav_tab_content(
         side_nav_tab_id = "decision_tree",
         material_card(
             tags$h3("Decision Tree")
         ),
         
-        material_row(
-            material_column(
-                width = 5,
-                
-                material_card(
-                    
-                    tags$h5("Outcomes"),
-                    
-                    tableOutput("dec_tree_res"),
-                    
-                    # textOutput("dec_tree_prob"),
-                    
-                )
-            ),
-            
-            material_column(
-                width = 7,
-                
-                material_card(
-                    
-                    tags$h5("Decision Tree Rules"),
-                    
-                    div(style = 'overflow-x: scroll', uiOutput('dec_tree_logic'))
-                    
-                )
-                
-            )
-        )
+        
         
 
         
@@ -228,46 +284,70 @@ server <- function(input, output) {
     #                                            select(-c(Type,DateTime,DurationS,Li7)) %>% 
     #                                            datatable())
     
-## uploaded data -----------------------------------------------------------------------------------------
+## Upload data -----------------------------------------------------------------------------------------
 
     uploaded_data  <- reactive({
-        inFile <- input$file_upload
-
-        if (is.null(inFile)){
+        
+        if (is.null(input$file_upload)){
             return(NULL)
         }
-        # showTab(inputId = "tabs", target = "Uploaded data")
-        read_csv(inFile$datapath)
+        
+        ext <- tools::file_ext(input$file_upload$name)
+        
+        switch(ext,
+               csv = vroom(input$file_upload$datapath, delim = ","),
+               tsv = vroom(input$file_upload$datapath, delim = "\t"),
+               validate("Invalid file; please upload a .csv or .tsv file"))
+        
+        # inFile <- input$file_upload
+        # 
+        
+        # read_csv(inFile$datapath)
+        
+        # delim <- ifelse(input$delim == "", NULL, input$delim)
+        # vroom::vroom(input$file_up, delim = input$delim, skip = input$skip)
+    })
+    
+    
+    uploaded_clean <- reactive({
+        if (is.null(uploaded_data())){
+            return(NULL)
+        }
+        
+        uploaded_data() %>% cleaning_step_1() %>% cleaning_step_2()
+        
     })
     
     uploaded_ctrl <- reactive({
-        if (is.null(uploaded_data())){
+        if (is.null(uploaded_clean())){
             return(NULL)
         }
-        uploaded_data() %>% filter(type == "control")
+        uploaded_clean() %>% filter(type == "control")
     })
     
     uploaded_rec <- reactive({
-        if (is.null(uploaded_data())){
+        if (is.null(uploaded_clean())){
             return(NULL)
         }
-        uploaded_data() %>% filter(type == "recovered")
+        uploaded_clean() %>% filter(type == "recovered")
     })
     
     
     output$upl_data_tbl <- renderDataTable({
         uploaded_data()
-    })
+        
+    }, options = list(scrollX = TRUE))
     
     output$upl_ctrl_tbl <- renderDataTable({
         uploaded_ctrl()
-    })
+    }, options = list(scrollX = TRUE))
     
     output$upl_rec_tbl <- renderDataTable({
         uploaded_rec()
-    })
+    }, options = list(scrollX = TRUE))
     
-    
+
+## Clean Data ----------------------------------------------------------------------------------------
     
     
     
@@ -312,7 +392,7 @@ server <- function(input, output) {
     #     }
     #               )
     
-## interval criteria output -----------------------------------------------------------------------
+## interval criteria output --------------------------------------------------------------------------
     # standard
     
     interval_results <- reactive({

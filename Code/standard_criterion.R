@@ -14,7 +14,7 @@ standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
     pacman::p_load(tidyverse)
     
     # cotrol data
-    ctrl_data <- ctrl_data %>% select(mg_ppm_m24:last_col())
+    ctrl_data <- ctrl_data %>% select(li_7:last_col())
     ctrl_mean <- ctrl_data %>% summarise_all(mean) %>% as_vector()
     ctrl_sd <- ctrl_data %>% summarise_all(sd) %>% as_vector()
     
@@ -33,7 +33,7 @@ standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
         
         rec_smpl <- rec_data %>%
             filter(frag == rec_frags[i]) %>% 
-            select(mg_ppm_m24:last_col()) %>% 
+            select(li_7:last_col()) %>% 
             summarise_all(mean) %>%
             as_vector()
         
@@ -50,7 +50,7 @@ standard_criterion <- function(ctrl_data, rec_data, sigma = 4) {
 }
 
 # ## driver
-# data <- read_csv("Data/202106_clean_data_aus.csv")
+# data <- read_csv("Data/clean_db.csv")
 # data
 # ctrl_data <- data %>% filter(obj == "760-27")
 # ctrl_data
