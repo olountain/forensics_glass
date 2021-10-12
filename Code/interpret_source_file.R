@@ -50,7 +50,7 @@ interpret_source_file <- function(str) {
                 obj <- "Error"
                 frag <- NA
                 rep <- NA
-                type <- NA
+                type <- "Error"
             } else {
                 type <- "control"
                 
@@ -65,7 +65,7 @@ interpret_source_file <- function(str) {
                 obj <- "Error"
                 frag <- NA
                 rep <- NA
-                type <- NA
+                type <- "Error"
             } else {
                 type <- "recovered"
                 
@@ -78,7 +78,7 @@ interpret_source_file <- function(str) {
             obj <- "Error"
             frag <- NA
             rep <- NA
-            type <- NA
+            type <- "Error"
         }
         
         
@@ -90,7 +90,7 @@ interpret_source_file <- function(str) {
             obj <- "Error"
             frag <- NA
             rep <- NA
-            type <- NA
+            type <- "Error"
         }
         
         # otherwise type is "standard"
@@ -102,9 +102,6 @@ interpret_source_file <- function(str) {
     
     # returning info a a tibble
     out <- tibble(source_file = str, case_id = case_id, type = type, obj = obj, frag = frag, rep = rep)
-    
-    # make sure all levels are included
-    out$type <- factor(out$type, levels = c("control", "recovered", "standard"))
     
     return(out)
     

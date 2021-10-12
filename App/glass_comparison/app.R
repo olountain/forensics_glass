@@ -301,46 +301,57 @@ server <- function(input, output, session) {
     
 ## Upload data -----------------------------------------------------------------------------------------
 
-    uploaded_data  <- reactive({
-        
-        if (is.null(input$file_upload)){
-            return(NULL)
-        }
+    
+    uploaded_clean_step_1 <- reactiveValues(x = NULL )
+    
+    
+    observe({
+        req(input$file_upload)
         
         ext <- tools::file_ext(input$file_upload$name)
-        
-        switch(ext,
+
+        x <- switch(ext,
                csv = vroom(input$file_upload$datapath, delim = ","),
                tsv = vroom(input$file_upload$datapath, delim = "\t"),
                validate("Invalid file; please upload a .csv or .tsv file"))
         
-        # inFile <- input$file_upload
-        # 
+        uploaded_clean_step_1$x <- x %>% cleaning_step_1()
         
-        # read_csv(inFile$datapath)
-        
-        # delim <- ifelse(input$delim == "", NULL, input$delim)
-        # vroom::vroom(input$file_up, delim = input$delim, skip = input$skip)
     })
     
-    
-    uploaded_clean_step_1 <- reactive({
-        if (is.null(uploaded_data())){
+    uploaded_data  <- reactive({
+
+        if (is.null(input$file_upload)){
             return(NULL)
         }
-        
-        uploaded_data() %>% cleaning_step_1()
-        
-        
+
+        ext <- tools::file_ext(input$file_upload$name)
+
+        switch(ext,
+               csv = vroom(input$file_upload$datapath, delim = ","),
+               tsv = vroom(input$file_upload$datapath, delim = "\t"),
+               validate("Invalid file; please upload a .csv or .tsv file"))
     })
+    
+    
+    # uploaded_clean_step_1 <- reactiveValues({
+    #     if (is.null(uploaded_data())){
+    #         x = NULL
+    #     }
+    #     
+    #     x = uploaded_data() %>% cleaning_step_1()
+    #     
+    #     
+    # })
     
     output$upload_status <- renderText({
         
-        if (is.null(uploaded_clean_step_1())){
+        if (is.null(uploaded_clean_step_1$x)){
             return(NULL)
         }
         
-        error_data <- uploaded_clean_step_1() %>% filter(case_id == "Error")
+        error_data <- uploaded_clean_step_1$x %>%
+            filter(case_id == "Error" | type == "Error" | obj == "Error")
         
         if (nrow(error_data) > 0) {
             error_text <- paste("There were", nrow(error_data),
@@ -383,7 +394,7 @@ server <- function(input, output, session) {
     ## editing newly uploaded data ------------------------------------------------------------------------------
     
     output$upl_error_tbl <- renderDT({
-        uploaded_clean_step_1()
+        isolate(uploaded_clean_step_1$x)
         # datatable() %>% 
         #     formatStyle(0, target = "row", backgroundColor = styleEqual(which(uploaded_errors()$case_id == "Error"), "red"))
         
@@ -396,21 +407,23 @@ server <- function(input, output, session) {
         info = input$upl_error_tbl_cell_edit
         str(info)
         i = info$row
-        j = info$col + 1
+        j = info$col
         v = info$value
-        isolate(
-            uploaded_clean_step_1()[i, j] <<- DT::coerceValue(v, uploaded_clean_step_1()[i, j])
-        )
         
-        replaceData(proxy, uploaded_clean_step_1, resetPaging = FALSE, rownames = FALSE) # important
+        if (j == 5 | j == 6){
+            v = as.numeric(v)
+        }
+
+        uploaded_clean_step_1$x[i, j] <<- isolate(DT::coerceValue(v, uploaded_clean_step_1$x[i, j]))
+        replaceData(proxy, uploaded_clean_step_1$x, resetPaging = FALSE) # important
     })
     
     uploaded_clean_step_2 <- reactive({
-        if (is.null(uploaded_clean_step_1())){
+        if (is.null(uploaded_clean_step_1$x)){
             return(NULL)
         }
         
-        uploaded_clean_step_1() %>% cleaning_step_2()
+        uploaded_clean_step_1$x %>% cleaning_step_2()
         
         
     })
