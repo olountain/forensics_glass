@@ -46,7 +46,7 @@ source("../../Code/parse_tree_text.R")
 path <- "../../Models/decision_tree_aus_weights.txt"
 # source("Code/parse_tree_text.R")
 # path <- "Models/decision_tree_aus_weights.txt"
-# test_tree <- parse_decision_tree(path)
+test_tree <- parse_decision_tree(path)
 # ctrl_mean <- ctrl_data %>%
 #     select(mg_ppm_m24:last_col()) %>%
 #     summarise_all(mean)
@@ -108,6 +108,7 @@ ui <- material_page(
         material_tabs(
             tabs = c(
                 "Upload Data" = "upload_tab",
+                "Parse Data" = "parse_tab",
                 "Clean Data" = "clean_tab"
             )
         ),
@@ -130,6 +131,20 @@ ui <- material_page(
             
 
         ),
+        
+        material_tab_content(
+            tab_id = "parse_tab",
+            
+            material_card(
+                
+                # print clean status
+                htmlOutput("upload_status"),
+                
+                dataTableOutput('upl_error_tbl')
+                
+            ),
+        ),
+
         material_tab_content(
             tab_id = "clean_tab",
             
@@ -270,16 +285,16 @@ ui <- material_page(
     )
 )
 
-server <- function(input, output) {
+server <- function(input, output, session) {
     
 ## old example data to display -------------------------------------------------------------------------------
     
-    # output$ctrl_data_tbl <- renderDataTable(ctrl_data %>%
+    # output$ctrl_data_tbl <- renderDT(ctrl_data %>%
     #                                         clean_names(sep_in = "_ppm_m", case = "big_camel") %>% 
     #                                         select(-c(Type,Rep,DateTime,DurationS,Li7)) %>% 
     #                                             datatable())
     # 
-    # output$rec_data_tbl <- renderDataTable(rec_data %>%
+    # output$rec_data_tbl <- renderDT(rec_data %>%
     #                                            clean_names(sep_in = "_ppm_m", case = "big_camel") %>% 
     #                                            select(-c(Type,DateTime,DurationS,Li7)) %>% 
     #                                            datatable())
@@ -309,40 +324,119 @@ server <- function(input, output) {
     })
     
     
-    uploaded_clean <- reactive({
+    uploaded_clean_step_1 <- reactive({
         if (is.null(uploaded_data())){
             return(NULL)
         }
         
-        uploaded_data() %>% cleaning_step_1() %>% cleaning_step_2()
+        uploaded_data() %>% cleaning_step_1()
+        
         
     })
     
-    uploaded_ctrl <- reactive({
-        if (is.null(uploaded_clean())){
+    output$upload_status <- renderText({
+        
+        if (is.null(uploaded_clean_step_1())){
             return(NULL)
         }
-        uploaded_clean() %>% filter(type == "control")
+        
+        error_data <- uploaded_clean_step_1() %>% filter(case_id == "Error")
+        
+        if (nrow(error_data) > 0) {
+            error_text <- paste("There were", nrow(error_data),
+                                "errors in parsing the data.")
+            error_text <- paste("<span style=\"color:red\">", error_text, "</span>", sep = "")
+            return(error_text)
+        } else {
+            return("Data cleaned successfully!")
+            
+        }
+        
     })
     
-    uploaded_rec <- reactive({
-        if (is.null(uploaded_clean())){
+    uploaded_errors <- reactive({
+        
+        if (is.null(uploaded_data())){
             return(NULL)
         }
-        uploaded_clean() %>% filter(type == "recovered")
+        
+        error_data <- uploaded_data() %>% cleaning_step_1() %>% filter(case_id == "Error")
+        
+        if (nrow(error_data) > 0) {
+            return(error_data)
+        } else {
+            return(NULL)
+            
+        }
+        
     })
     
     
-    output$upl_data_tbl <- renderDataTable({
+    
+    output$upl_data_tbl <- renderDT({
         uploaded_data()
         
     }, options = list(scrollX = TRUE))
     
-    output$upl_ctrl_tbl <- renderDataTable({
+    
+    
+    ## editing newly uploaded data ------------------------------------------------------------------------------
+    
+    output$upl_error_tbl <- renderDT({
+        uploaded_clean_step_1()
+        # datatable() %>% 
+        #     formatStyle(0, target = "row", backgroundColor = styleEqual(which(uploaded_errors()$case_id == "Error"), "red"))
+        
+    }, editable = TRUE,
+    options = list(scrollX = TRUE))
+    
+    proxy = dataTableProxy("upl_error_tbl")
+    
+    observeEvent(input$upl_error_tbl_cell_edit, {
+        info = input$upl_error_tbl_cell_edit
+        str(info)
+        i = info$row
+        j = info$col + 1
+        v = info$value
+        isolate(
+            uploaded_clean_step_1()[i, j] <<- DT::coerceValue(v, uploaded_clean_step_1()[i, j])
+        )
+        
+        replaceData(proxy, uploaded_clean_step_1, resetPaging = FALSE, rownames = FALSE) # important
+    })
+    
+    uploaded_clean_step_2 <- reactive({
+        if (is.null(uploaded_clean_step_1())){
+            return(NULL)
+        }
+        
+        uploaded_clean_step_1() %>% cleaning_step_2()
+        
+        
+    })
+    
+    
+    ## displaying cleaned data ---------------------------------------------------------------------------------
+    
+    uploaded_ctrl <- reactive({
+        if (is.null(uploaded_clean_step_2())){
+            return(NULL)
+        }
+        uploaded_clean_step_2() %>% filter(type == "control")
+    })
+    
+    uploaded_rec <- reactive({
+        if (is.null(uploaded_clean_step_2())){
+            return(NULL)
+        }
+        uploaded_clean_step_2() %>% filter(type == "recovered")
+    })
+    
+    output$upl_ctrl_tbl <- renderDT({
         uploaded_ctrl()
     }, options = list(scrollX = TRUE))
     
-    output$upl_rec_tbl <- renderDataTable({
+    output$upl_rec_tbl <- renderDT({
         uploaded_rec()
     }, options = list(scrollX = TRUE))
     
@@ -367,7 +461,7 @@ server <- function(input, output) {
     #     return(out)
     # })
     # 
-    # output$upl_data_tbl <- renderDataTable({
+    # output$upl_data_tbl <- renderDT({
     #     req(input$file_upload)
     # 
     #     tryCatch(
@@ -434,8 +528,7 @@ server <- function(input, output) {
             }
             standard_criterion(uploaded_ctrl(), uploaded_rec()) %>%
                 unnest(distances) %>% 
-                select(-c(Match:Score)) %>% 
-                clean_names(sep_in = "_ppm_m", case = "big_camel")
+                select(-c(Match:Score))
         },
         digits = 3
         )
@@ -470,18 +563,18 @@ server <- function(input, output) {
         }
         
         ctrl_mean <- uploaded_ctrl() %>%
-            select(mg_ppm_m24:last_col()) %>%
+            select(li_7:last_col()) %>%
             summarise_all(mean)
         
         rec_means <- uploaded_rec() %>%
             group_by(frag) %>%
-            select(mg_ppm_m24:last_col()) %>%
+            select(li_7:last_col()) %>%
             summarise_all(mean)
         
         rec_diffs <- rec_means
         
         for (i in 1:nrow(rec_means)) {
-            rec_diffs[i, 2:18] <- abs(ctrl_mean - rec_means[i, 2:18])
+            rec_diffs[i, 2:19] <- abs(ctrl_mean - rec_means[i, 2:19])
         }
         
         tree_res <- vector(mode = "list", length = nrow(rec_diffs))
