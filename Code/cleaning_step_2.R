@@ -22,8 +22,13 @@ cleaning_step_2 <- function(data) {
         data <- data %>% select(-"ablation_time")
     }
     
-    data <- data %>% clean_names(sep_in = "_ppm_m") %>% 
-        select(-ca_43)
+    # data <- data %>% clean_names(sep_in = "_ppm_m") %>% 
+    #     select(-ca_43)
+    
+    c_names <- colnames(data)
+    c_names <- str_remove(c_names, "ppm_m")
+    colnames(data) <- c_names
+    data <- data %>% select(-ca_43)
     
     return(data)
     
@@ -31,7 +36,10 @@ cleaning_step_2 <- function(data) {
 
 ## Driver ----------------------------------------------------------------------------------------------
 # file1 <- "Data/dirty_data_example.tsv"
+# file2 <- "Data/dirty_data_with_errors.tsv"
 # 
-# data <- cleaning_step_1(file1)
+# data1 <- read_tsv(file1)
+# data2 <- read_tsv(file2)
 # 
+# data <- cleaning_step_1(data1)
 # cleaning_step_2(data)

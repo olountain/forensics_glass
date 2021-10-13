@@ -100,8 +100,10 @@ search_database <- function(my_db, smpl, tree = FALSE) {
 # 
 # for (i in 1:length(db_files)) {
 #     new_file <- read_csv(db_files[i])
-#     
+# 
 #     my_db <- bind_rows(my_db, new_file)
 # }
+# 
+# smpl <- my_db %>% filter(obj == "760-16")
 # my_db <- my_db %>% filter(obj != smpl$obj[1])
 # search_database(my_db, smpl, tree = TRUE)

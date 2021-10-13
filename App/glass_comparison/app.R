@@ -33,6 +33,9 @@ for (i in 1:length(db_files)) {
     my_db <- bind_rows(my_db, new_file)
 }
 
+smpl <- my_db %>% filter(obj == "760-16")
+my_db <- my_db %>% filter(obj != smpl$obj[1])
+
 source("../../Code/search_database.R")
 
 
@@ -568,7 +571,7 @@ server <- function(input, output, session) {
     database_results <- reactiveValues(val = NULL)
     
     # observeEvent(input$search_database, {
-    #     database_results$val <- search_database(my_db, )
+    #     database_results$val <- search_database(my_db, smpl)
     # })
     
     
