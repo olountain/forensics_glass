@@ -13,7 +13,7 @@ cleaning_step_1 <- function(data) {
     
     if (nrow(error_data) > 0) {
         row_nums <- which(data$case_id == "Error")
-        row_nums <- paste(row_nums, collapse = ", ")
+        row_nums <- paste(row_nums, collapse = ", ") 
         error_text <- paste("There were", nrow(error_data),
                             "errors in parsing the data. Errors can be found in rows", row_nums)
         warning(error_text)

@@ -5,77 +5,38 @@ pacman::p_load(shiny,
                kableExtra,
                janitor,
                DT,
-               vroom)
+               vroom,
+               lubridate)
 
-# sample data
-# data <- read_csv("../../Data/202106_clean_data_aus.csv") %>%
-#     select(-X1) %>% 
-#     mutate(frag = as.integer(frag), rep = as.integer(rep))
-#     
-# # data <- read_csv("Data/202106_clean_data_aus.csv") %>% select(-X1)
-# ctrl_data <- data %>% filter(obj == "760-27")
-# rec_data <- data %>% filter(obj == "760-16")
-
-# bind_rows(ctrl_data, rec_data) %>% write_csv(file = "Data/clean_test_data.csv")
-
+## Code to import ---------------------------------------------------------------------------------------------
+# cleaning code
 source("../../Code/interpret_source_file.R")
 source("../../Code/cleaning_step_1.R")
 source("../../Code/cleaning_step_2.R")
 
-# setup interval criteria
+# interval criteria
 source("../../Code/standard_criterion.R")
 source("../../Code/ellipsoid_criterion.R")
-# source("Code/standard_criterion.R")
-# source("Code/ellipsoid_criterion.R")
 
-# std_res <- standard_criterion(ctrl_data, rec_data)
-# ellips_res <- ellipsoid_criterion(ctrl_data, rec_data)
-# 
-# all_res
-# 
-# all_res <- bind_cols(std_res[,1:3], ellips_res[,2:3]) %>% 
-#     rename(`Standard Match` = Match...2,
-#            `Standard Score` = Score...3,
-#            `Ellipsoid Match` = Match...4,
-#            `Ellipsoid Score` = Score...5) %>% 
-#     mutate(Agree = ifelse(`Standard Match` == `Ellipsoid Match`,
-#                           "Yes", "No"))
-
-# setup decision tree
+# decision tree
 source("../../Code/parse_tree_text.R")
 path <- "../../Models/decision_tree_aus_weights.txt"
-# source("Code/parse_tree_text.R")
-# path <- "Models/decision_tree_aus_weights.txt"
-test_tree <- parse_decision_tree(path)
-# ctrl_mean <- ctrl_data %>%
-#     select(mg_ppm_m24:last_col()) %>%
-#     summarise_all(mean)
-# 
-# rec_means <- rec_data %>%
-#     group_by(frag) %>%
-#     select(mg_ppm_m24:last_col()) %>%
-#     summarise_all(mean)
-# 
-# rec_diffs <- rec_means
-# 
-# for (i in 1:nrow(rec_means)) {
-#     rec_diffs[i, 2:18] <- abs(ctrl_mean - rec_means[i, 2:18])
-# }
-# 
-# tree_res <- vector(mode = "list", length = nrow(rec_diffs))
-# 
-# for (i in 1:nrow(rec_diffs)) {
-#     tree_res[[i]] <- test_tree(rec_diffs[i,])
-#     tree_res[[i]]$probs <- max(tree_res[[i]]$probs)
-# }
-# 
-# tree_res <- tree_res %>%
-#     map_dfr(as_tibble) %>%
-#     rename(Match = class, Probability = probs)
+dec_tree <- parse_decision_tree(path)
+
+## Load database
+db_files <- list.files("../../Database", pattern = "*.csv", full.names = T)
+my_db <- tibble()
+
+for (i in 1:length(db_files)) {
+    new_file <- read_csv(db_files[i])
+    
+    my_db <- bind_rows(my_db, new_file)
+}
+
+source("../../Code/search_database.R")
 
 
-
-# Wrap shinymaterial apps in material_page
+####################  UI ####################  
 ui <- material_page(
     title = "Glass Comparison",
     primary_theme_color = "dodgerblue",
@@ -268,36 +229,50 @@ ui <- material_page(
     
     ),
 
-## Decision Tree Side Tab --------------------------------------------------------------------------------
-    material_side_nav_tab_content(
-        side_nav_tab_id = "decision_tree",
+material_side_nav_tab_content(
+    side_nav_tab_id = "search_database",
+    
+    material_tabs(
+        tabs = c(
+            "View Database" = "view_db",
+            "Search for Matches" = "search_for_matches"
+        )
+    ),
+    
+    material_tab_content(
+        tab_id = "view_db",
+        
         material_card(
-            tags$h3("Decision Tree")
-        ),
+            tags$h5("Glass Database"),
+            
+            DTOutput("db_display")
+        )
         
         
         
-
+    ),
+    
+    material_tab_content(
         
+        tab_id = "search_for_matches",
         
-        
+        material_card(
+            material_button("search_database", "Search for Matches"),
+            
+            dataTableOutput('search_results')
+        )
         
     )
+    
 )
 
+)
+
+## Decision Tree Side Tab --------------------------------------------------------------------------------
+
+
+#################### Server #################### 
 server <- function(input, output, session) {
-    
-## old example data to display -------------------------------------------------------------------------------
-    
-    # output$ctrl_data_tbl <- renderDT(ctrl_data %>%
-    #                                         clean_names(sep_in = "_ppm_m", case = "big_camel") %>% 
-    #                                         select(-c(Type,Rep,DateTime,DurationS,Li7)) %>% 
-    #                                             datatable())
-    # 
-    # output$rec_data_tbl <- renderDT(rec_data %>%
-    #                                            clean_names(sep_in = "_ppm_m", case = "big_camel") %>% 
-    #                                            select(-c(Type,DateTime,DurationS,Li7)) %>% 
-    #                                            datatable())
     
 ## Upload data -----------------------------------------------------------------------------------------
 
@@ -354,8 +329,19 @@ server <- function(input, output, session) {
             filter(case_id == "Error" | type == "Error" | obj == "Error")
         
         if (nrow(error_data) > 0) {
-            error_text <- paste("There were", nrow(error_data),
-                                "errors in parsing the data.")
+            row_nums <- which(uploaded_clean_step_1$x$case_id == "Error")
+            
+            if (length(row_nums) > 1) {
+                row_nums <- paste(paste(row_nums[1:length(row_nums)-1], collapse = ", "), "and", row_nums[length(row_nums)])
+                error_text <- paste("There were", nrow(error_data),
+                                    "errors in parsing the data. The errors can be found in rows", row_nums)
+            } else{
+                row_nums <- paste(row_nums, collapse = ", ")
+                error_text <- paste("There was one error in parsing the data. The error can be found in row", row_nums)
+            }
+            
+            
+            
             error_text <- paste("<span style=\"color:red\">", error_text, "</span>", sep = "")
             return(error_text)
         } else {
@@ -454,50 +440,6 @@ server <- function(input, output, session) {
     }, options = list(scrollX = TRUE))
     
 
-## Clean Data ----------------------------------------------------------------------------------------
-    
-    
-    
-## old upload stuff ------------------------------------------------------------------------------------
-    # output$upl_success <- renderText({
-    #     req(input$file_upload)
-    #     
-    #     tryCatch(
-    #         {
-    #             out <- "Upload Successful"
-    #         },
-    #         error = function(e){
-    #             stop(safeError(e))
-    #         }
-    #     )
-    #     
-    #     return(out)
-    # })
-    # 
-    # output$upl_data_tbl <- renderDT({
-    #     req(input$file_upload)
-    # 
-    #     tryCatch(
-    #         {
-    #             df <- read_csv(input$file_upload$datapath)
-    #         },
-    #         error = function(e){
-    #             stop(safeError(e))
-    #         }
-    #     )
-    # 
-    #     return(df %>% datatable())
-    # })
-
-## ----
-    ## perform calculations
-    
-    # eventReactive(
-    #     "calculate",
-    #     {
-    #         
-    #     }
-    #               )
     
 ## interval criteria output --------------------------------------------------------------------------
     # standard
@@ -547,24 +489,7 @@ server <- function(input, output, session) {
         )
     
     
-    
-## old interval results ---------------------------------------------------------------------------
-    
-    
-    
-    # tmp <- input$ctrl_data_tbl_rows_selected
-    
-    # output$table_all <- renderTable(all_res, digits = 3)
-    
-    # output$table_differences <- renderTable(std_res %>%
-    #                                     unnest(distances) %>% 
-    #                                     select(-c(Match:Score)) %>% 
-    #                                     clean_names(sep_in = "_ppm_m", case = "big_camel"),
-    #                                     digits = 3)
-    
-    # ellipsoid
-    # output$res_ellips <- renderText(ellips_res$Match[1])
-    # output$table_ellips <- renderTable(ellips_res)
+
     
 
 ## decision tree output ------------------------------------------------------------------------
@@ -587,29 +512,27 @@ server <- function(input, output, session) {
         rec_diffs <- rec_means
         
         for (i in 1:nrow(rec_means)) {
-            rec_diffs[i, 2:19] <- abs(ctrl_mean - rec_means[i, 2:19])
+            rec_diffs[i,] <- abs(ctrl_mean - rec_means[i,])
         }
         
         tree_res <- vector(mode = "list", length = nrow(rec_diffs))
         
         for (i in 1:nrow(rec_diffs)) {
-            tree_res[[i]] <- test_tree(rec_diffs[i,])
+            tree_res[[i]] <- dec_tree(rec_diffs[i,])
             tree_res[[i]]$probs <- max(tree_res[[i]]$probs)
         }
         
         tree_res <- tree_res %>%
             map_dfr(as_tibble) %>%
-            rename(Match = class, Probability = probs)
+            rename(Match = class, Probability = probs) %>% 
+            mutate(Fragment = rec_means$frag) %>% 
+            select(Fragment, Match, Probability)
         
         
         return(tree_res)
         
         
     })
-    
-    
-    
-    
     
     
     
@@ -630,6 +553,27 @@ server <- function(input, output, session) {
         replacedText <- lapply(splitText, pre)
         
         return(replacedText)
+    })
+    
+    
+    
+## Search Database ----------------------------------------------------------------------------
+    
+    output$db_display <- renderDT({
+        
+        my_db %>% select(-duration_s) %>% arrange(date_time)
+        
+    }, options = list(scrollX = TRUE))
+    
+    database_results <- reactiveValues(val = NULL)
+    
+    # observeEvent(input$search_database, {
+    #     database_results$val <- search_database(my_db, )
+    # })
+    
+    
+    output$search_results <- renderDT({
+        database_results
     })
     
 }
