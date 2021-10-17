@@ -9,6 +9,11 @@ search_database <- function(my_db, smpl, tree = FALSE) {
         pull(obj) %>% 
         unique()
     
+    objs <- my_db %>%
+        filter(type %in% c("control")) %>% 
+        pull(obj) %>% 
+        unique()
+    
     n_obj <- length(objs)
     
     for (i in 1:n_obj) {
@@ -94,7 +99,7 @@ search_database <- function(my_db, smpl, tree = FALSE) {
 
 
 
-# ## driver
+## driver
 # db_files <- list.files("Database", pattern = "*.csv", full.names = T)
 # my_db <- tibble()
 # 
@@ -106,4 +111,4 @@ search_database <- function(my_db, smpl, tree = FALSE) {
 # 
 # smpl <- my_db %>% filter(obj == "760-16")
 # my_db <- my_db %>% filter(obj != smpl$obj[1])
-# search_database(my_db, smpl, tree = TRUE)
+# search_database(my_db, smpl, tree = F)

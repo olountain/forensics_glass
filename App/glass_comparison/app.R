@@ -39,7 +39,7 @@ my_db <- my_db %>% filter(obj != smpl$obj[1])
 source("../../Code/search_database.R")
 
 
-####################  UI ####################  
+# UI ----
 ui <- material_page(
     title = "Glass Comparison",
     primary_theme_color = "dodgerblue",
@@ -66,7 +66,7 @@ ui <- material_page(
     # Define side-nav tab content
     material_side_nav_tab_content(
         
-## Data Side Tab -------------------------------------------------------------------------------------
+    ## Data Side Tab ----
         side_nav_tab_id = "data",
 
         material_tabs(
@@ -127,31 +127,10 @@ ui <- material_page(
             ),
         ),
         
-        
-
-## Old example cards ---------------------------------------------------------------------------------
-        # material_card(
-        #     tags$h5("Control Data"),
-        #     
-        #     div(style = 'overflow-x: scroll', dataTableOutput('ctrl_data_tbl'))
-        # ),
-        # 
-        # material_card(
-        #     tags$h5("Recovered Data"),
-        #     
-        #     div(style = 'overflow-x: scroll', dataTableOutput('rec_data_tbl'))
-        # ),
-
-## Calculate button ----------------------------------------------------------------------------------
-        # material_button(
-        #     input_id = "calculate",
-        #     label = "Calculate"
-        # )
-        
     ),
 
 
-## Intrerval Side Tab --------------------------------------------------------------------------------
+    ## Intrerval Side Tab --------------------------------------------------------------------------------
     material_side_nav_tab_content(
         side_nav_tab_id = "compare_samples",
         
@@ -260,7 +239,9 @@ material_side_nav_tab_content(
         tab_id = "search_for_matches",
         
         material_card(
-            material_button("search_database", "Search for Matches"),
+            actionButton("search_button", "Search for Matches", style="background-color: dodgerblue"),
+            
+            textOutput("search_text"),
             
             dataTableOutput('search_results')
         )
@@ -274,10 +255,10 @@ material_side_nav_tab_content(
 ## Decision Tree Side Tab --------------------------------------------------------------------------------
 
 
-#################### Server #################### 
+# Server ----
 server <- function(input, output, session) {
     
-## Upload data -----------------------------------------------------------------------------------------
+    ## Upload data -----------------------------------------------------------------------------------------
 
     
     uploaded_clean_step_1 <- reactiveValues(x = NULL )
@@ -444,7 +425,7 @@ server <- function(input, output, session) {
     
 
     
-## interval criteria output --------------------------------------------------------------------------
+    ## interval criteria output --------------------------------------------------------------------------
     # standard
     
     interval_results <- reactive({
@@ -495,11 +476,11 @@ server <- function(input, output, session) {
 
     
 
-## decision tree output ------------------------------------------------------------------------
+    ## decision tree output ------------------------------------------------------------------------
     
     decision_tree_results <- reactive({
         
-        if (is.null(uploaded_data())){
+        if (is.null(uploaded_ctrl())){
             return(NULL)
         }
         
@@ -515,7 +496,7 @@ server <- function(input, output, session) {
         rec_diffs <- rec_means
         
         for (i in 1:nrow(rec_means)) {
-            rec_diffs[i,] <- abs(ctrl_mean - rec_means[i,])
+            rec_diffs[i,-1] <- abs(ctrl_mean - rec_means[i,-1])
         }
         
         tree_res <- vector(mode = "list", length = nrow(rec_diffs))
@@ -560,7 +541,7 @@ server <- function(input, output, session) {
     
     
     
-## Search Database ----------------------------------------------------------------------------
+    ## Search Database ----------------------------------------------------------------------------
     
     output$db_display <- renderDT({
         
@@ -570,13 +551,30 @@ server <- function(input, output, session) {
     
     database_results <- reactiveValues(val = NULL)
     
-    # observeEvent(input$search_database, {
-    #     database_results$val <- search_database(my_db, smpl)
-    # })
+    search_text <- reactiveValues(text = NULL)
+    
+    observeEvent(input$search_button, {
+        
+        search_text$text <- "Searching..."
+        
+        material_spinner_show(session, "search_results")
+        
+        database_results$val <- search_database(my_db, smpl, tree = FALSE)
+
+        material_spinner_hide(session, "search_results")
+        
+        search_text$text <- paste(nrow(database_results$val), "potential matches found.")
+    })
+    
+    output$search_text <- renderText({
+        if (is.null(search_text$text)) return()
+        search_text$text
+    })
     
     
     output$search_results <- renderDT({
-        database_results
+        if (is.null(database_results$val)) return()
+        database_results$val
     })
     
 }
