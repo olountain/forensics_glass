@@ -60,7 +60,52 @@ ui <- material_page(
     ),
     
     material_side_nav_tab_content(
-        side_nav_tab_id = "instructions"
+        side_nav_tab_id = "instructions",
+        
+        material_card(
+            tags$h5("Welcome"),
+            
+            tags$div(
+                "This app can be used to make comparison between samples of elemental glass data.
+                The app consists of three main sections:",
+                
+                tags$ul(
+                    tags$li("- Data,"),
+                    tags$li("- Compare Samples, and"),
+                    tags$li("- Search Database."),
+            ),
+            "In the data section, we have three subsections. First, the 'Upload Data' tab, 
+            in which a raw LA-ICPMS output file can be uploaded. The file will then be displayed for the user to ensure that
+            the file has been uploaded correctly. Next, the user can move to the 'Check for Errors' tab. In this section,
+            the data will be processed such that the case ID, object number, and whether the sample is control or recovered
+            is extracted. If the information in any of the rows in the data set do not match the required format,
+            these rows will be identified as errors. The user can then manually correct the information in these rows by
+            double clicking on the information which they wish to edit. The rest of the data is also displayed in this section
+            and the user can check for any errors which may not have been identified by the app, and correct them manually as well.
+            Finally, in the 'Processed Data' tab, the processed version of the data is displayed, separated into control and recovered
+            data sets."),
+            
+            tags$br(),
+            
+            tags$div(
+            "In the 'Compare Samples' section, the results of a comparison between the control and recovered samples which
+            have been uploaded is shown. In the first tab, titled 'Interval Criteria' the results of the standard and ellipsoid
+            criteria are shown for each recovered fragment, and in the second tab, titled 'Decision Tree' the results of the
+            comparison by decision tree are shown."
+            ),
+            
+            tags$br(),
+            
+            tags$div(
+            "Finally, in the 'Search Database' section, comparison can be made between the uploaded samples and any samples
+            already in the database. In the first tab, titled 'View Database' the entire database is presented in a table for the
+            user to explore. In the second tab, titled 'Search for Matches', the user can search for any samples in the database
+            which match the uploaded samples. The 'match' is decided using the standard and ellipsoid criteria, and any sample
+            which matches by at least one of these criteria will be listed, including the score for each criterion."
+            ),
+            
+            
+        )
     ),
     
     # Define side-nav tab content
@@ -72,8 +117,8 @@ ui <- material_page(
         material_tabs(
             tabs = c(
                 "Upload Data" = "upload_tab",
-                "Parse Data" = "parse_tab",
-                "Clean Data" = "clean_tab"
+                "Check for Errors" = "parse_tab",
+                "Processed Data" = "clean_tab"
             )
         ),
 
@@ -145,9 +190,9 @@ ui <- material_page(
             tab_id = "interval_criteria",
         
         
-            material_row(
-                material_column(
-                    width = 6,
+            # material_row(
+                # material_column(
+                    # width = 6,
                     
                     material_card(
                         tags$h5("Outcomes"),
@@ -158,10 +203,10 @@ ui <- material_page(
                         
                         div(style = 'overflow-x: scroll', tableOutput('table_all'))
                     ),
-                ),
+                # ),
                 
-                material_column(
-                    width = 6,
+                # material_column(
+                #     width = 6,
                     
                     material_card(
                         tags$h5("Element Differences"),
@@ -169,8 +214,8 @@ ui <- material_page(
                         div(style = 'overflow-x: scroll', tableOutput('table_differences'))
                     )
                     
-                )
-            ),
+                # )
+            # ),
     
         ),
 
